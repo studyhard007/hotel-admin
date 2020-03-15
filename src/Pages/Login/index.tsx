@@ -1,20 +1,36 @@
 import React from 'react';
 import {Form, Icon, Input, Button, Checkbox} from 'antd';
+import {RouteComponentProps} from 'react-router-dom'
 import { FormComponentProps } from "antd/lib/form/Form";
+import { withRouter } from 'react-router'
+import './index.scss'
 
-class Login extends React.Component<FormComponentProps> {
+interface LoginPagePros extends RouteComponentProps, FormComponentProps {}
+// @ts-ignore
+@withRouter
+class Login extends React.Component<LoginPagePros> {
  handleSubmit = (e: any) =>{
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-        if(!err) {
-            console.log('-----------Success!')
+        if(!err) 
+        {
+           this.props.history.push('/app/room')
+           console.log(this.props);
         }
     })
  }
  render() {
      const { getFieldDecorator } = this.props.form
   return (
-      <Form onSubmit={this.handleSubmit}>
+      <div className='loginwrapper'>
+      <Form onSubmit={this.handleSubmit}
+      labelCol={{
+        span: 5
+      }}
+      wrapperCol={{
+        span: 14
+      }}
+      >
           <Form.Item>
               {getFieldDecorator('username', {
                   rules: [{
@@ -40,17 +56,18 @@ class Login extends React.Component<FormComponentProps> {
                         valuePropName: 'checked',
                         initialValue: true,
                     })(
-                        <Checkbox>Remember me</Checkbox>
+                        <Checkbox>记住我</Checkbox>
                     )}
-                    <a className="login-form-forgot" href="">Forgot password</a>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
-                        Log in
+                    <Button type="primary" htmlType="submit">
+                    Log in
                     </Button>
-                    Or <a href="">register now!</a>
+                    <a href="https:www.baidu.com">Forgot password</a>
+                    Or <a href="https:www.baidu.com">register now!</a>
                 </Form.Item>
       </Form>
+      </div>
   )
  }
 }
 
-export default (Form.create()(Login));
+export default Form.create()(Login);
