@@ -1,6 +1,6 @@
 import React from 'react';
-
-class About extends React.Component {
+import { FormComponentProps } from "antd/lib/form/Form";
+class About extends React.Component<FormComponentProps> {
  render() {
   return (
       <div>About页面</div>

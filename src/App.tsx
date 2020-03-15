@@ -1,10 +1,10 @@
 import React from 'react';
-import Home from './Pages/Home'
+import Login from './Pages/Login/index'
 import "./App.less";
 
 function App() {
     return (
-        <Home></Home>
+        <Login></Login>
     );
 }
 
