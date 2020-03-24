@@ -15,7 +15,6 @@ class Login extends React.Component<LoginPagePros> {
         if(!err) 
         {
            this.props.history.push('/app/room')
-           console.log(this.props);
         }
     })
  }
@@ -23,6 +22,7 @@ class Login extends React.Component<LoginPagePros> {
      const { getFieldDecorator } = this.props.form
   return (
       <div className='loginwrapper'>
+      <div className='title'>酒店服务管理系统</div>
       <Form onSubmit={this.handleSubmit}
       labelCol={{
         span: 5
@@ -38,7 +38,7 @@ class Login extends React.Component<LoginPagePros> {
                       message: '请输入用户名'
                   }]
               })(
-                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
+                <Input prefix={<Icon type="user" style={{ fontSize: 15 }} />} style={{width: '300px'}} placeholder="用户名" />
             )}
           </Form.Item>
           <Form.Item>
@@ -48,7 +48,7 @@ class Login extends React.Component<LoginPagePros> {
                       message: '请输入密码'
                   }]
               })(
-                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type='password' placeholder="用户名" />
+                <Input prefix={<Icon type="lock" style={{ fontSize: 15 }} />} type='password' style={{width: '300px'}} placeholder="用户名" />
             )}
           </Form.Item>
           <Form.Item>
