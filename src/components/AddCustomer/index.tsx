@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Input} from 'antd';
+import {Form, Input, Radio} from 'antd';
 import { FormComponentProps } from "antd/lib/form/Form";
 class AddCustomerForm extends React.Component<FormComponentProps> {
   render() {
@@ -24,7 +24,7 @@ class AddCustomerForm extends React.Component<FormComponentProps> {
                 }
               ]
             })(
-              <Input></Input>
+              <Input placeholder="请输入姓名"></Input>
             )
           }
         </Form.Item>
@@ -38,7 +38,10 @@ class AddCustomerForm extends React.Component<FormComponentProps> {
                 }
               ]
             })(
-              <Input></Input>
+              <Radio.Group>
+                <Radio value="男">男</Radio>
+                <Radio value="女">女</Radio>
+              </Radio.Group>
             )
           }
         </Form.Item>

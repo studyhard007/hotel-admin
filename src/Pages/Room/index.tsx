@@ -1,6 +1,21 @@
 import React from 'react';
-import { Table, Tag } from 'antd';
+import { Table, Tag, Modal, Button } from 'antd';
+import {RouteComponentProps} from 'react-router-dom'
+import { FormComponentProps } from "antd/lib/form/Form";
+import RoomForm from '../../components/AddRoom';
 
+interface CustomerPageProps extends RouteComponentProps, FormComponentProps {}
+type RoomModal = {
+  roomtype?: string;
+  number?:string;
+  price?:string;
+  introduction?:string;
+}
+type RoomPageState = {
+  visible: boolean;
+  collapsed?:boolean;
+  list: Array<RoomModal> | null
+}
 const columns = [
     {
       title: '房间类型',
@@ -72,19 +87,59 @@ const data = [
       tags: ['cool', 'teacher'],
     },
   ];
-class Room extends React.Component {
+class Room extends React.Component<CustomerPageProps> {
     
-    state = {
+    state: RoomPageState = {
+        visible:false,
+        list: null,
         collapsed: false
     };
+    roomform: any;
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed
         })
     }
+    toggleAddRoomModal = () => {
+      this.setState({
+        visible: !this.state.visible
+      })
+    }
     render() {
         return (
+          <>
+            <Modal 
+             title='录入客房信息'
+             visible={this.state.visible}
+             onCancel={() => {
+               this.setState({
+                 visible: !this.state.visible
+               });
+               this.roomform.props.form.resetFields();
+             }}
+             onOk={() => {
+              this.roomform.props.form.validateFields(
+                async (error: any, values: RoomModal) => {
+                  if(error){
+                    return;
+                  }
+                  try{
+                    console.log(values);
+                  }catch(err) {
+                    console.log(err);
+                  }    
+                this.setState({
+                  visible: !this.state.visible
+                });
+              })
+              this.roomform.props.form.resetFields();
+             }}
+             >
+               <RoomForm wrappedComponentRef={(inst: any) => {this.roomform = inst}}></RoomForm>
+             </Modal>
+             <Button type='primary' onClick={this.toggleAddRoomModal.bind(this)}>录入客房信息</Button>
             <Table columns={columns} dataSource={data} />
+          </>
         );
     }
 }

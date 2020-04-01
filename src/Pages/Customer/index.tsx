@@ -7,6 +7,7 @@ import CustomerForm from '../../components/AddCustomer';
 
 interface CustomerPageProps extends RouteComponentProps, FormComponentProps {}
 type CustomerModel = {
+  id: string;
   name: string;
   gender?: string;
   age?: string;
@@ -17,7 +18,9 @@ type CustomerPageState ={
   collapsed?: boolean;
   list: Array<CustomerModel> | null;
 }
-const columns = [
+
+class Customer extends React.Component<CustomerPageProps> {
+  columns = [
     {
       title: '姓名',
       dataIndex: 'name',
@@ -41,16 +44,32 @@ const columns = [
     {
       title: 'Action',
       key: 'action',
-      render: (text: any, record: { name: React.ReactNode; }) => (
-        <span>
-          {/* <a>Invite {record.name}</a>
-          <Divider type="vertical" />
-          <a>Delete</a> */}
-        </span>
+      render: (text: any, record: CustomerModel) => (
+        <Button type='link' onClick={async () => {
+          fetch('http://localhost:3000/api/v1/deletecustomer', {
+            method: 'post',
+            headers: {
+              'Accept': 'application/json,text/plain, */*',
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `id=${record.id}`
+          }).then((response) => {
+            message.success('删除成功')
+            fetch('http://localhost:3000/api/v1/getcustomerlist').then(res => {
+              return res.json()
+            }).then(data => {
+              this.setState({
+                list:data.data
+              })
+            })
+            return response.json();
+          }).catch((err) => {
+            console.log(err)
+          });
+        }}>删除</Button>
       ),
     },
   ];
-class Customer extends React.Component<CustomerPageProps> {
     state: CustomerPageState = {
         visible: false,
         collapsed: false,
@@ -91,7 +110,6 @@ class Customer extends React.Component<CustomerPageProps> {
                   this.customerform.props.form.resetFields();
                 }}
                 onOk={() => {
-                  console.log(this.customerform.props.form.getFieldsValue());
                   this.customerform.props.form.validateFields(
                     async (errors: any, values: CustomerModel) => {
                       if(errors) {
@@ -129,15 +147,12 @@ class Customer extends React.Component<CustomerPageProps> {
                     }
                     }
                   )
-                  // this.setState({
-                  //   visible: !this.state.visible
-                  // });
                 }}
                 >
                   <CustomerForm wrappedComponentRef={(inst: any) => {this.customerform = inst}}></CustomerForm>
                 </Modal>
-                <Button onClick={this.toggleAddCustomerModal.bind(this)}>录入顾客信息</Button>
-                <Table columns={columns} dataSource={this.state.list!}/>
+                <Button type='primary' onClick={this.toggleAddCustomerModal.bind(this)}>录入顾客信息</Button>
+                <Table columns={this.columns} dataSource={this.state.list!}/>
               </>
             );
     }
