@@ -42,7 +42,7 @@ class Customer extends React.Component<CustomerPageProps> {
       dataIndex: 'idcard'
     },
     {
-      title: 'Action',
+      title: '操作',
       key: 'action',
       render: (text: any, record: CustomerModel) => (
         <Button type='link' onClick={async () => {
@@ -123,7 +123,7 @@ class Customer extends React.Component<CustomerPageProps> {
                           'Content-Type': 'application/x-www-form-urlencoded'
                         },
                         body: `name=${values.name}&gender=${values.gender}&age=${values.age}&idcard=${values.idcard}`
-                      }).then((resopnse) => {
+                      }).then((response) => {
                         message.success('录入顾客信息成功');
                         this.setState({
                           visible: !this.state.visible
@@ -136,7 +136,7 @@ class Customer extends React.Component<CustomerPageProps> {
                           })
                         })
                         this.customerform.props.form.resetFields();
-                        return resopnse.json()
+                        return response.json()
                       }).then((data) => {
                         console.log(data)
                       }).catch(function(error){

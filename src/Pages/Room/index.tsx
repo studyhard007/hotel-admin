@@ -1,14 +1,15 @@
 import React from 'react';
-import { Table, Tag, Modal, Button } from 'antd';
+import { Table, Modal, Button, message } from 'antd';
 import {RouteComponentProps} from 'react-router-dom'
 import { FormComponentProps } from "antd/lib/form/Form";
 import RoomForm from '../../components/AddRoom';
 
 interface CustomerPageProps extends RouteComponentProps, FormComponentProps {}
 type RoomModal = {
-  roomtype?: string;
-  number?:string;
+  number?: string;
+  type?:string;
   price?:string;
+  decoration?:string;
   introduction?:string;
 }
 type RoomPageState = {
@@ -16,77 +17,7 @@ type RoomPageState = {
   collapsed?:boolean;
   list: Array<RoomModal> | null
 }
-const columns = [
-    {
-      title: '房间类型',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '价格',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: '身份证号',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (tags: any[]) => (
-        <span>
-          {tags.map(tag => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text: any, record: { name: React.ReactNode; }) => (
-        <span>
-          {/* <a>Invite {record.name}</a>
-          <Divider type="vertical" />
-          <a>Delete</a> */}
-        </span>
-      ),
-    },
-  ];
-const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
+
 class Room extends React.Component<CustomerPageProps> {
     
     state: RoomPageState = {
@@ -94,7 +25,49 @@ class Room extends React.Component<CustomerPageProps> {
         list: null,
         collapsed: false
     };
+    columns = [
+      {
+        title: '房间编号',
+        dataIndex: 'number',
+        key: 'number',
+      },
+      {
+        title: '房间类型',
+        dataIndex: 'type',
+        key: 'type',
+      },
+      {
+        title: '价格',
+        dataIndex: 'price',
+        key: 'price',
+      },
+      {
+        title: '房间装潢',
+        key: 'decoration',
+        dataIndex: 'decoration',
+      },
+      {
+        title: '操作',
+        key: 'action',
+        render: (text: any, record: any) => (
+          <span>
+            {/* <a>Invite {record.name}</a>
+            <Divider type="vertical" />
+            <a>Delete</a> */}
+          </span>
+        ),
+      },
+    ];
     roomform: any;
+    componentDidMount() {
+      fetch('http://localhost:3000/api/v1/getroomlist').then(res => {
+        return res.json();
+      }).then(data => {
+        this.setState({
+          list: data.data
+        })
+      })
+    }
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed
@@ -110,6 +83,8 @@ class Room extends React.Component<CustomerPageProps> {
           <>
             <Modal 
              title='录入客房信息'
+             okText="保存"
+             cancelText="取消"
              visible={this.state.visible}
              onCancel={() => {
                this.setState({
@@ -124,13 +99,34 @@ class Room extends React.Component<CustomerPageProps> {
                     return;
                   }
                   try{
-                    console.log(values);
+                    fetch('http://localhost:3000/api/v1/createroom',{
+                      method: 'post',
+                      headers: {
+                          'Accept': 'application/json,text/plain, */*',
+                          'Content-Type': 'application/x-www-form-urlencoded'
+                      },
+                      body: `number=${values.number}&type=${values.type}&price=${values.price}&decoration=${values.decoration}&introduction=${values.introduction}`
+                    }).then((response) => {
+                      message.success('录入房间信息成功')
+                      this.setState({
+                        visible: !this.state.visible
+                      })
+                      fetch('http://localhost:3000/api/v1/getroomlist').then(res => {
+                        return res.json()
+                      }).then(data => {
+                        this.setState({
+                          list:data.data
+                        })
+                      })
+                    }).then(data => {
+                      console.log(data);
+                    }).catch(function(error){
+                      console.log(error)
+                    })
                   }catch(err) {
                     console.log(err);
+                    message.error('录入房间信息失败');
                   }    
-                this.setState({
-                  visible: !this.state.visible
-                });
               })
               this.roomform.props.form.resetFields();
              }}
@@ -138,7 +134,7 @@ class Room extends React.Component<CustomerPageProps> {
                <RoomForm wrappedComponentRef={(inst: any) => {this.roomform = inst}}></RoomForm>
              </Modal>
              <Button type='primary' onClick={this.toggleAddRoomModal.bind(this)}>录入客房信息</Button>
-            <Table columns={columns} dataSource={data} />
+            <Table columns={this.columns} dataSource={this.state.list!} />
           </>
         );
     }

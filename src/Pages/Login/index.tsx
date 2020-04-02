@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox} from 'antd';
+import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import {RouteComponentProps} from 'react-router-dom'
 import { FormComponentProps } from "antd/lib/form/Form";
 import { withRouter } from 'react-router'
@@ -12,9 +12,11 @@ class Login extends React.Component<LoginPagePros> {
  handleSubmit = (e: any) =>{
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-        if(!err) 
+        if(values.username === '15217710352' && values.password === '123456') 
         {
            this.props.history.push('/app/room')
+        }else {
+            message.error('账号或密码错误,请重试');
         }
     })
  }
@@ -42,7 +44,7 @@ class Login extends React.Component<LoginPagePros> {
             )}
           </Form.Item>
           <Form.Item>
-              {getFieldDecorator('username', {
+              {getFieldDecorator('password', {
                   rules: [{
                       required: true,
                       message: '请输入密码'
