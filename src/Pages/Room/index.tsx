@@ -6,6 +6,7 @@ import RoomForm from '../../components/AddRoom';
 
 interface CustomerPageProps extends RouteComponentProps, FormComponentProps {}
 type RoomModal = {
+  id?:number;
   number?: string;
   type?:string;
   price?:string;
@@ -49,12 +50,29 @@ class Room extends React.Component<CustomerPageProps> {
       {
         title: '操作',
         key: 'action',
-        render: (text: any, record: any) => (
-          <span>
-            {/* <a>Invite {record.name}</a>
-            <Divider type="vertical" />
-            <a>Delete</a> */}
-          </span>
+        render: (text: any, record: RoomModal) => (
+          <Button type='link' onClick={async () => {
+            fetch('http://localhost:3000/api/v1/deleteroom', {
+              method: 'post',
+              headers: {
+                'Accept': 'application/json,text/plain, */*',
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: `id=${record.id}`
+            }).then((response) => {
+              message.success('删除成功')
+              fetch('http://localhost:3000/api/v1/getcustomerlist').then(res => {
+                return res.json()
+              }).then(data => {
+                this.setState({
+                  list:data.data
+                })
+              })
+              return response.json();
+            }).catch((err) => {
+              console.log(err)
+            });
+          }}>删除</Button>
         ),
       },
     ];
