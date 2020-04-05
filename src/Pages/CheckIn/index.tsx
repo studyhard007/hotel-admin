@@ -1,11 +1,18 @@
 import React from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, message, Modal } from 'antd';
 import {RouteComponentProps} from 'react-router-dom'
 import { FormComponentProps } from "antd/lib/form/Form";
 import CheckInSearchForm from '../../components/CheckInSearch';
+import CheckInMessageForm from '../../components/CheckInMessage';
 import './index.scss';
 
 interface CheckInPageProps extends RouteComponentProps, FormComponentProps {}
+type CheckInMessageModel = {
+  customername: string;
+  customeridcard: string;
+  checkintime?: number;
+  checkouttime: number;
+}
 type RoomModal = {
   id?:number;
   number?: string;
@@ -13,8 +20,10 @@ type RoomModal = {
   price?:string;
   decoration?:string;
   introduction?:string;
+  isfree?: string | boolean;
 }
 type CheckInPageState = {
+  id: number;
   visible: boolean;
   collapsed?:boolean;
   list: Array<RoomModal> | null
@@ -23,11 +32,13 @@ type CheckInPageState = {
 class CheckInPage extends React.Component<CheckInPageProps> {
     
     state: CheckInPageState = {
+        id: 0,
         visible:false,
         list: null,
         collapsed: false
     };
     CheckInSearchForm: any;
+    CheckInMessageForm: any;
     columns = [
       {
         title: '房间编号',
@@ -49,36 +60,31 @@ class CheckInPage extends React.Component<CheckInPageProps> {
         key: 'decoration',
         dataIndex: 'decoration',
       },
-      // {
-      //   title: '操作',
-      //   key: 'action',
-      //   render: (text: any, record: RoomModal) => (
-      //     <Button type='link' onClick={async () => {
-      //       fetch('http://localhost:3000/api/v1/deleteroom', {
-      //         method: 'post',
-      //         headers: {
-      //           'Accept': 'application/json,text/plain, */*',
-      //           'Content-Type': 'application/x-www-form-urlencoded'
-      //         },
-      //         body: `id=${record.id}`
-      //       }).then((response) => {
-      //         message.success('删除成功')
-      //         fetch('http://localhost:3000/api/v1/getcustomerlist').then(res => {
-      //           return res.json()
-      //         }).then(data => {
-      //           this.setState({
-      //             list:data.data
-      //           })
-      //         })
-      //         return response.json();
-      //       }).catch((err) => {
-      //         console.log(err)
-      //       });
-      //     }}>删除</Button>
-      //   ),
-      // },
+      {
+        title: '房间状态',
+        key: 'isfree',
+        render: (text: any, record: RoomModal) => {
+          if(record.isfree === 'true') {
+            return '空闲';
+          }else if(record.isfree === 'false') {
+            return '入住中';
+          }
+        }
+      },
+      {
+        title: '操作',
+        key: 'action',
+        render: (text: any, record: RoomModal) => (
+          <Button type='link' onClick={async () => {
+            this.setState({
+              id: record.id
+            })
+            this.toggleCheckInMessageModal();
+          }}>办理入住</Button>
+        ),
+      },
     ];
-    roomform: any;
+
     componentDidMount() {
       fetch('http://localhost:3000/api/v1/getroomlist').then(res => {
         return res.json();
@@ -93,19 +99,79 @@ class CheckInPage extends React.Component<CheckInPageProps> {
             collapsed: !this.state.collapsed
         })
     }
-    // toggleAddRoomModal = () => {
-    //   this.setState({
-    //     visible: !this.state.visible
-    //   })
-    // }
+    handleSearchSubmit = () => {
+      this.CheckInSearchForm.props.form.validateFields(
+        async (errors: any, values: RoomModal) => {
+          if(values.isfree === 'true') {
+            values.isfree = true;
+          } else if (values.isfree === 'false') {
+            values.isfree = false;
+          }
+          console.log(values)
+          if(errors) {
+            return;
+          }
+          try {
+            const bodysearch = [];
+            if(values.type) {
+              bodysearch.push(`type=${values.type}`)
+            }
+            if(values.decoration) {
+              bodysearch.push(``)
+            }
+            fetch('http://localhost:3000/api/v1/searchroom', {
+                        method: 'post',
+                        headers: {
+                          'Accept': 'application/json,text/plain, */*',
+                          'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `type=${values.type}&decoration=${values.decoration}&isfree=${values.isfree}`
+                      }).then(res => {
+                        return res.json();
+                      }).then(data => {
+                        this.setState({
+                          list: data.data
+                        })
+                        message.success('查询成功')
+                      })
+          }catch(err) {
+            console.log(err)
+          }
+        }
+      )
+    }
+    toggleCheckInMessageModal = () => {
+      this.setState({
+        visible: !this.state.visible
+      })
+    }
     render() {
         return (
           <>
             <div className='search'> 
             <CheckInSearchForm wrappedComponentRef={(inst: any) => {this.CheckInSearchForm = inst}}></CheckInSearchForm>
-            <Button className='button' type='primary'>查询</Button>
+            <Button className='button' type='primary' onClick={this.handleSearchSubmit}>查询</Button>
             </div>
             <Table columns={this.columns} dataSource={this.state.list!} />
+            <Modal
+            title='入住信息登记'
+            visible={this.state.visible}
+            onOk={() => {
+              this.CheckInMessageForm.props.form.validateFields(
+                async (errors: any, values: CheckInMessageModel) => {
+                  console.log(values);
+                }
+              )
+              this.toggleCheckInMessageModal();
+              this.CheckInMessageForm.props.form.resetFields();
+            }}
+            onCancel={() => {
+              this.CheckInMessageForm.props.form.resetFields();
+              this.toggleCheckInMessageModal();
+            }}
+            >
+              <CheckInMessageForm wrappedComponentRef={(inst: any) => {this.CheckInMessageForm = inst}}></CheckInMessageForm>
+            </Modal>
           </>
         );
     }

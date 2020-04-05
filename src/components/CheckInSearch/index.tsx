@@ -45,7 +45,7 @@ class CheckInSearchForm extends React.Component<FormComponentProps> {
         </Form.Item>
         <Form.Item label='房间状态'>
           {
-            getFieldDecorator('state',{
+            getFieldDecorator('isfree',{
             })(
               <Select className='selecttype' placeholder='请选择房间状态'>
                 <Option value='true'>空闲</Option>
