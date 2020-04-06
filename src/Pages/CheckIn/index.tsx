@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Button, message, Modal } from 'antd';
-import {RouteComponentProps} from 'react-router-dom'
+import {RouteComponentProps} from 'react-router-dom';
+import moment from 'moment';
 import { FormComponentProps } from "antd/lib/form/Form";
 import CheckInSearchForm from '../../components/CheckInSearch';
 import CheckInMessageForm from '../../components/CheckInMessage';
@@ -12,6 +13,7 @@ type CheckInMessageModel = {
   customeridcard: string;
   checkintime?: number;
   checkouttime: number;
+  isfree?: string;
 }
 type RoomModal = {
   id?:number;
@@ -107,7 +109,6 @@ class CheckInPage extends React.Component<CheckInPageProps> {
           } else if (values.isfree === 'false') {
             values.isfree = false;
           }
-          console.log(values)
           if(errors) {
             return;
           }
@@ -155,15 +156,51 @@ class CheckInPage extends React.Component<CheckInPageProps> {
             <Table columns={this.columns} dataSource={this.state.list!} />
             <Modal
             title='入住信息登记'
+            okText='确定'
+            cancelText='取消'
             visible={this.state.visible}
             onOk={() => {
               this.CheckInMessageForm.props.form.validateFields(
                 async (errors: any, values: CheckInMessageModel) => {
-                  console.log(values);
+                  if(errors) {
+                    return;
+                  }
+                  try {
+                    fetch('http://localhost:3000/api/v1/roomcheckin',{
+                      method: 'post',
+                      headers: {
+                          'Accept': 'application/json,text/plain, */*',
+                          'Content-Type': 'application/x-www-form-urlencoded'
+                      },
+                      body: `id=${this.state.id}
+                      &customername=${values.customername}
+                      &customeridcard=${values.customeridcard}
+                      &checkouttime=${moment(values.checkouttime).hour(12).minute(0).second(0).unix()}
+                      &isfree=${'false'}`
+                    }).then((response) => {
+                      message.success('登记成功');
+                      this.setState({
+                        visible: !this.state.visible
+                      });
+                      fetch('http://localhost:3000/api/v1/getroomlist').then(res => {
+                        return res.json()
+                      }).then(data => {
+                        this.setState({
+                          list:data.data
+                        })
+                      })
+                    }).then(data => {
+                      console.log(data);
+                    }).catch(function (err) {
+                      console.log(err);
+                    })
+                  }catch(error) {
+                    console.log(error);
+                  }
+                  this.CheckInMessageForm.props.form.resetFields();
                 }
               )
-              this.toggleCheckInMessageModal();
-              this.CheckInMessageForm.props.form.resetFields();
+
             }}
             onCancel={() => {
               this.CheckInMessageForm.props.form.resetFields();

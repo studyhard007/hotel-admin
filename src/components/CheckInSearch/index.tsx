@@ -22,7 +22,7 @@ class CheckInSearchForm extends React.Component<FormComponentProps> {
             getFieldDecorator('type', {
               
             })(
-              <Select className='selecttype' placeholder='请选择房间类型'>
+              <Select allowClear={true} className='selecttype' placeholder='请选择房间类型'>
                 <Option value='标准单床'>标准单床</Option>
                 <Option value='大床'>大床</Option>
                 <Option value='双床'>双床</Option>
@@ -35,7 +35,7 @@ class CheckInSearchForm extends React.Component<FormComponentProps> {
           {
             getFieldDecorator('decoration',{
             })(
-              <Select className='selecttype' placeholder='请选择装潢类型'>
+              <Select allowClear={true} className='selecttype' placeholder='请选择装潢类型'>
                 <Option value='标准'>标准</Option>
                 <Option value='精装'>精装</Option>
                 <Option value='豪华'>豪华</Option>
@@ -47,7 +47,7 @@ class CheckInSearchForm extends React.Component<FormComponentProps> {
           {
             getFieldDecorator('isfree',{
             })(
-              <Select className='selecttype' placeholder='请选择房间状态'>
+              <Select allowClear={true} className='selecttype' placeholder='请选择房间状态'>
                 <Option value='true'>空闲</Option>
                 <Option value='false'>已入住</Option>
               </Select>
