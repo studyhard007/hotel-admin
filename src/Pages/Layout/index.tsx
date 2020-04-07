@@ -4,6 +4,9 @@ import {Route, Link, Switch} from 'react-router-dom';
 import Room from '../Room/index'
 import Customer from '../Customer/index'
 import CheckIn from '../CheckIn/index';
+import CheckOut from '../CheckOut/index';
+import CheckInSearch from '../CheckInSearch';
+import BillInquiry from '../BillInquiry';
 import './index.scss'
 const {Header, Sider, Content} = Layout;
 
@@ -32,10 +35,18 @@ class Layouts extends React.Component {
                             <Link style={{display: 'inline-block', textDecoration: 'none'}} to={'/app/checkin'}>入住管理</Link>
                         </Menu.Item>
                         <Menu.Item key="2">
+                            <Icon type="user-add"/>
+                            <Link style={{display: 'inline-block', textDecoration: 'none'}} to={'/app/checkinsearch'}>入住查询</Link>
+                        </Menu.Item>
+                        <Menu.Item key="3">
+                            <Icon type="user-add"/>
+                            <Link style={{display: 'inline-block', textDecoration: 'none'}} to={'/app/billinquiry'}>账单查询</Link>
+                        </Menu.Item>
+                        <Menu.Item key="4">
                             <Icon type="home"/>
                             <Link style={{display: 'inline-block', textDecoration: 'none'}} to={'/app/room'}>客房管理</Link>
                         </Menu.Item>
-                        <Menu.Item key="3">
+                        <Menu.Item key="5">
                             <Icon type="user"/>
                             <Link style={{display: 'inline-block', textDecoration: 'none'}} to={'/app/customer'}>顾客管理</Link>
                         </Menu.Item>
@@ -51,9 +62,12 @@ class Layouts extends React.Component {
                     </Header>
                     <Content style={{margin: '24px 16px', padding: 24, background: '#fff', minHeight: 641}}>
                         <Switch>
+                            <Route path='/app/checkin' component={CheckIn} />
                             <Route path="/app/room" component={Room}/>
                             <Route path="/app/customer" component={Customer}/>
-                            <Route path='/app/checkin' component={CheckIn} />
+                            <Route path='/app/checkout' component={CheckOut} />
+                            <Route path='/app/checkinsearch' component={CheckInSearch} />
+                            <Route path='/app/billinquiry' component={BillInquiry} />
                         </Switch>
                     </Content>
                 </Layout>

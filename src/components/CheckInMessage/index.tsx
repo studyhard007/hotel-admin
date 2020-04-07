@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Input, DatePicker } from 'antd';
+import {Form, Input, DatePicker, InputNumber } from 'antd';
 import 'moment/locale/zh-cn';
 import { FormComponentProps } from "antd/lib/form/Form";
 
@@ -41,6 +41,21 @@ class CheckInMessage extends React.Component<FormComponentProps> {
              ]
            })(
              <Input style={{width: '300px'}} placeholder="请输入顾客身份证"></Input>
+           )
+         }
+       </Form.Item>
+       <Form.Item label='收取押金'>
+         {
+           getFieldDecorator('deposit', {
+            initialValue: 100,
+            rules: [
+              {
+                required: true,
+                message: '请输入押金数'
+              }
+            ]
+           })(
+             <InputNumber  style={{width: '300px'}}></InputNumber>
            )
          }
        </Form.Item>

@@ -13,15 +13,23 @@ type CheckInMessageModel = {
   customeridcard: string;
   checkintime?: number;
   checkouttime: number;
+  deposit: number;
   isfree?: string;
 }
-type RoomModal = {
+export type RoomModal = {
   id?:number;
   number?: string;
   type?:string;
   price?:string;
   decoration?:string;
   introduction?:string;
+  customername?:string;
+  customeridcard?:string;
+  checkintime?:number;
+  checkouttime?:number;
+  deposit?:number;
+  createdAt?: string;
+  updatedAt?:string;
   isfree?: string | boolean;
 }
 type CheckInPageState = {
@@ -78,11 +86,18 @@ class CheckInPage extends React.Component<CheckInPageProps> {
         key: 'action',
         render: (text: any, record: RoomModal) => (
           <Button type='link' onClick={async () => {
-            this.setState({
-              id: record.id
-            })
-            this.toggleCheckInMessageModal();
-          }}>办理入住</Button>
+            if(record.isfree === 'true') {
+              this.setState({
+                id: record.id
+              })
+              this.toggleCheckInMessageModal();
+            }else {
+              this.props.history.push({
+                pathname: '/app/checkout',
+                search: `id=${record.id}`
+              })
+            }
+          }}>{record.isfree === 'true' ? '办理入住' : '退房'}</Button>
         ),
       },
     ];
@@ -153,7 +168,7 @@ class CheckInPage extends React.Component<CheckInPageProps> {
             <CheckInSearchForm wrappedComponentRef={(inst: any) => {this.CheckInSearchForm = inst}}></CheckInSearchForm>
             <Button className='button' type='primary' onClick={this.handleSearchSubmit}>查询</Button>
             </div>
-            <Table columns={this.columns} dataSource={this.state.list!} />
+            <Table scroll={{ y: 500 }} columns={this.columns} dataSource={this.state.list!} />
             <Modal
             title='入住信息登记'
             okText='确定'
@@ -172,11 +187,7 @@ class CheckInPage extends React.Component<CheckInPageProps> {
                           'Accept': 'application/json,text/plain, */*',
                           'Content-Type': 'application/x-www-form-urlencoded'
                       },
-                      body: `id=${this.state.id}
-                      &customername=${values.customername}
-                      &customeridcard=${values.customeridcard}
-                      &checkouttime=${moment(values.checkouttime).hour(12).minute(0).second(0).unix()}
-                      &isfree=${'false'}`
+                      body: `id=${this.state.id}&customername=${values.customername}&customeridcard=${values.customeridcard}&checkouttime=${moment(values.checkouttime).hour(12).minute(0).second(0).unix()}&isfree=${'false'}&deposit=${values.deposit}`
                     }).then((response) => {
                       message.success('登记成功');
                       this.setState({
