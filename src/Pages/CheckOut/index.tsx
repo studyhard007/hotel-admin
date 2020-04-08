@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Row, Col, Button } from 'antd';
+import { Card, Row, Col, Button, Modal, message } from 'antd';
 import moment from 'moment';
 import {RouteComponentProps} from 'react-router-dom';
 import {RoomModal} from '../CheckIn/index';
@@ -7,9 +7,11 @@ import './index.scss';
 
 type ICheckOutState = {
   data: RoomModal
+  visible: boolean;
 }
 class CheckOutPage extends React.Component<RouteComponentProps> {
   state: ICheckOutState = {
+    visible: false,
     data: {}
   }
   componentDidMount() {
@@ -28,10 +30,16 @@ class CheckOutPage extends React.Component<RouteComponentProps> {
       console.log(error);
     }
   }
+  toggleModal = () => {
+    this.setState({
+      visible: !this.state.visible
+    })
+  }
   render() {
-    const {data} = this.state;
+    const {data, visible} = this.state;
     return (
-      <Card className='Card' title="房间入住信息" extra={<Button type='primary'>退房</Button>}>
+      <>
+      <Card className='Card' title="房间入住信息" extra={<Button type='primary' onClick={this.toggleModal}>退房</Button>}>
       <Row>
         <Col span={12}>
           <p>
@@ -123,6 +131,52 @@ class CheckOutPage extends React.Component<RouteComponentProps> {
         </Col>
       </Row>
     </Card>
+    <Modal title='办理退房' okText='确定' cancelText='取消' visible={visible} onOk={() => {
+        fetch('http://localhost:3000/api/v1/checkinrecord', {
+          method: 'post',
+          headers: {
+            'Accept': 'application/json,text/plain, */*',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `number=${data.number}&type=${data.type}&decoration=${data.decoration}&price=${data.price}&customername=${data.customername}&customeridcard=${data.customeridcard}&checkintime=${data.checkintime}&checkouttime=${data.checkouttime}&ischeckout=${true}`
+          }).then(res => {
+            return res.json();
+          })
+        fetch('http://localhost:3000/api/v1/roomcheckin',{
+          method: 'post',
+          headers: {
+            'Accept': 'application/json,text/plain, */*',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+            body: `id=${data.id}&customername=${'null'}&customeridcard=${'null'}&checkouttime=${0}&isfree=${'true'}&deposit=${0}&roomrate=${0}`
+          }).then((res) => {
+            message.success('退房成功')
+          })
+        this.props.history.goBack();
+        this.toggleModal();
+    }} onCancel={() => {
+      this.toggleModal();
+    }}>
+      <Row>
+        <Col span={24}>
+          <p>
+            <span className='Detaititle'>退还押金:</span>
+            <span className='Detailcontent'>
+              {data.deposit}
+            </span>
+          </p>
+        </Col>
+        <Col span={24}>
+          <p>
+            <span className='Detaititle'>预计退房时间:</span>
+            <span className='Detailcontent'>
+              {moment.unix(data.checkouttime!).format('YYYY-MM-DD HH:mm:ss')}
+            </span>
+          </p>
+        </Col>
+      </Row>
+    </Modal>
+    </>
     );
   }
 }

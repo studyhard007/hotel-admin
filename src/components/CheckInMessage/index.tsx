@@ -44,6 +44,20 @@ class CheckInMessage extends React.Component<FormComponentProps> {
            )
          }
        </Form.Item>
+       <Form.Item label='收取房费'>
+         {
+           getFieldDecorator('roomrate', {
+            rules: [
+              {
+                required: true,
+                message: '请输入房费'
+              }
+            ]
+           })(
+             <InputNumber  placeholder='请输入房费' style={{width: '300px'}}></InputNumber>
+           )
+         }
+       </Form.Item>
        <Form.Item label='收取押金'>
          {
            getFieldDecorator('deposit', {

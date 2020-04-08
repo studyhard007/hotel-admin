@@ -15,6 +15,7 @@ type CheckInMessageModel = {
   checkouttime: number;
   deposit: number;
   isfree?: string;
+  roomrate?:number;
 }
 export type RoomModal = {
   id?:number;
@@ -111,6 +112,15 @@ class CheckInPage extends React.Component<CheckInPageProps> {
         })
       })
     }
+    // componentDidUpdate() {
+    //   fetch('http://localhost:3000/api/v1/getroomlist').then(res => {
+    //     return res.json();
+    //   }).then(data => {
+    //     this.setState({
+    //       list: data.data
+    //     })
+    //   })
+    // }
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed
@@ -187,7 +197,7 @@ class CheckInPage extends React.Component<CheckInPageProps> {
                           'Accept': 'application/json,text/plain, */*',
                           'Content-Type': 'application/x-www-form-urlencoded'
                       },
-                      body: `id=${this.state.id}&customername=${values.customername}&customeridcard=${values.customeridcard}&checkouttime=${moment(values.checkouttime).hour(12).minute(0).second(0).unix()}&isfree=${'false'}&deposit=${values.deposit}`
+                      body: `id=${this.state.id}&customername=${values.customername}&customeridcard=${values.customeridcard}&checkouttime=${moment(values.checkouttime).hour(12).minute(0).second(0).unix()}&isfree=${'false'}&deposit=${values.deposit}&roomrate=${values.roomrate}`
                     }).then((response) => {
                       message.success('登记成功');
                       this.setState({
@@ -200,10 +210,6 @@ class CheckInPage extends React.Component<CheckInPageProps> {
                           list:data.data
                         })
                       })
-                    }).then(data => {
-                      console.log(data);
-                    }).catch(function (err) {
-                      console.log(err);
                     })
                   }catch(error) {
                     console.log(error);
@@ -211,7 +217,6 @@ class CheckInPage extends React.Component<CheckInPageProps> {
                   this.CheckInMessageForm.props.form.resetFields();
                 }
               )
-
             }}
             onCancel={() => {
               this.CheckInMessageForm.props.form.resetFields();
