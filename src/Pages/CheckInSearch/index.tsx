@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { Table } from 'antd';
-// import CheckInRecordForm from '../../components/CheckInRecord';
+import CheckInRecordForm from '../../components/CheckInRecord';
 type CheckInSearchModel = {
   number?: string;
   type?:string;
@@ -86,7 +86,7 @@ class CheckInSearchPage extends React.Component {
   render() {
     return (
       <>
-       {/* <CheckInRecordForm wrappedComponentRef={(inst: any) => {this.CheckInRecordForm = inst}}></CheckInRecordForm> */}
+       <CheckInRecordForm wrappedComponentRef={(ref: any) => {this.CheckInRecordForm = ref}}></CheckInRecordForm>
        <Table scroll={{ y: 500 }} columns={this.columns} dataSource={this.state.list!} />
       </>
     )
