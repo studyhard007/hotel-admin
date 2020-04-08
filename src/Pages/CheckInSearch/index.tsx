@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { Table } from 'antd';
+import { Table, Button, message } from 'antd';
 import CheckInRecordForm from '../../components/CheckInRecord';
 type CheckInSearchModel = {
   number?: string;
@@ -83,10 +83,38 @@ class CheckInSearchPage extends React.Component {
       })
     })
   }
+  handleSearchSubmit = () => {
+    this.CheckInRecordForm.props.form.validateFields(
+      async (errors: any, values: CheckInSearchModel) => {
+        try {
+          fetch('http://localhost:3000/api/v1/searchcheckrecord', {
+                      method: 'post',
+                      headers: {
+                        'Accept': 'application/json,text/plain, */*',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                      },
+                      body: `type=${values.type}&decoration=${values.decoration}&customername=${String(values.customername)}&customeridcard=${String(values.customeridcard)}`
+                    }).then(res => {
+                      return res.json();
+                    }).then(data => {
+                      this.setState({
+                        list: data.data
+                      })
+                      message.success('查询成功')
+                    })
+        }catch(err) {
+          console.log(err)
+        }
+      }
+    )
+  }
   render() {
     return (
       <>
+      <div className='search'>
        <CheckInRecordForm wrappedComponentRef={(ref: any) => {this.CheckInRecordForm = ref}}></CheckInRecordForm>
+       <Button className='button' type='primary' onClick={this.handleSearchSubmit}>查询</Button>
+      </div>
        <Table scroll={{ y: 500 }} columns={this.columns} dataSource={this.state.list!} />
       </>
     )

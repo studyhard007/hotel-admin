@@ -138,13 +138,6 @@ class CheckInPage extends React.Component<CheckInPageProps> {
             return;
           }
           try {
-            const bodysearch = [];
-            if(values.type) {
-              bodysearch.push(`type=${values.type}`)
-            }
-            if(values.decoration) {
-              bodysearch.push(``)
-            }
             fetch('http://localhost:3000/api/v1/searchroom', {
                         method: 'post',
                         headers: {
