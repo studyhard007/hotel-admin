@@ -152,7 +152,7 @@ class Room extends React.Component<CustomerPageProps> {
                <RoomForm wrappedComponentRef={(inst: any) => {this.roomform = inst}}></RoomForm>
              </Modal>
              <Button type='primary' onClick={this.toggleAddRoomModal.bind(this)}>录入客房信息</Button>
-            <Table scroll={{ y: 500 }} columns={this.columns} dataSource={this.state.list!} />
+            <Table scroll={{ y: 490 }} columns={this.columns} dataSource={this.state.list!} />
           </>
         );
     }

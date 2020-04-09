@@ -171,7 +171,7 @@ class CheckInPage extends React.Component<CheckInPageProps> {
             <CheckInSearchForm wrappedComponentRef={(inst: any) => {this.CheckInSearchForm = inst}}></CheckInSearchForm>
             <Button className='button' type='primary' onClick={this.handleSearchSubmit}>查询</Button>
             </div>
-            <Table scroll={{ y: 500 }} columns={this.columns} dataSource={this.state.list!} />
+            <Table scroll={{ y: 490 }} columns={this.columns} dataSource={this.state.list!} />
             <Modal
             title='入住信息登记'
             okText='确定'

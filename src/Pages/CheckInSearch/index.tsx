@@ -115,7 +115,7 @@ class CheckInSearchPage extends React.Component {
        <CheckInRecordForm wrappedComponentRef={(ref: any) => {this.CheckInRecordForm = ref}}></CheckInRecordForm>
        <Button className='button' type='primary' onClick={this.handleSearchSubmit}>查询</Button>
       </div>
-       <Table scroll={{ y: 500 }} columns={this.columns} dataSource={this.state.list!} />
+       <Table scroll={{ y: 490 }} columns={this.columns} dataSource={this.state.list!} />
       </>
     )
   }

@@ -152,7 +152,7 @@ class Customer extends React.Component<CustomerPageProps> {
                   <CustomerForm wrappedComponentRef={(inst: any) => {this.customerform = inst}}></CustomerForm>
                 </Modal>
                 <Button type='primary' onClick={this.toggleAddCustomerModal.bind(this)}>录入顾客信息</Button>
-                <Table scroll={{ y: 500 }} columns={this.columns} dataSource={this.state.list!}/>
+                <Table scroll={{ y: 490 }} columns={this.columns} dataSource={this.state.list!}/>
               </>
             );
     }

@@ -6,13 +6,14 @@ import {RoomModal} from '../CheckIn/index';
 import './index.scss';
 
 type ICheckOutState = {
+  roomid?: number;
   data: RoomModal
   visible: boolean;
 }
 class CheckOutPage extends React.Component<RouteComponentProps> {
   state: ICheckOutState = {
     visible: false,
-    data: {}
+    data: {},
   }
   componentDidMount() {
     let id = Number(this.props.location.search.slice(4));
@@ -21,7 +22,8 @@ class CheckOutPage extends React.Component<RouteComponentProps> {
       return res.json();
     }).then(data => {
       this.setState({
-        data: data.data
+        data: data.data,
+        roomid:id
       })
     }).catch(err => {
       console.log(err);
@@ -138,20 +140,11 @@ class CheckOutPage extends React.Component<RouteComponentProps> {
             'Accept': 'application/json,text/plain, */*',
             'Content-Type': 'application/x-www-form-urlencoded'
           },
-          body: `number=${data.number}&type=${data.type}&decoration=${data.decoration}&price=${data.price}&customername=${data.customername}&customeridcard=${data.customeridcard}&checkintime=${data.checkintime}&checkouttime=${data.checkouttime}&ischeckout=${true}`
+          body: `customeridcard=${this.state.data.customeridcard!}&ischeckout=${true}&id=${this.state.roomid}&isfree=${'true'}`
           }).then(res => {
             return res.json();
           })
-        fetch('http://localhost:3000/api/v1/roomcheckin',{
-          method: 'post',
-          headers: {
-            'Accept': 'application/json,text/plain, */*',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-            body: `id=${data.id}&customername=${'null'}&customeridcard=${'null'}&checkouttime=${0}&isfree=${'true'}&deposit=${0}&roomrate=${0}`
-          }).then((res) => {
-            message.success('退房成功')
-          })
+        message.success('退房成功');
         this.props.history.goBack();
         this.toggleModal();
     }} onCancel={() => {
