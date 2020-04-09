@@ -8,8 +8,10 @@ import CheckOut from '../CheckOut/index';
 import CheckInSearch from '../CheckInSearch';
 import BillInquiry from '../BillInquiry';
 import './index.scss'
+import {observer, inject} from 'mobx-react';
 const {Header, Sider, Content} = Layout;
-
+@inject('loginstore')
+@observer
 class Layouts extends React.Component {
     state = {
         collapsed: false,
@@ -19,7 +21,10 @@ class Layouts extends React.Component {
             collapsed: !this.state.collapsed,
         });
     }
-
+    componentDidMount(){
+    // @ts-ignore
+    console.log(this.props.loginstore)
+    }
     render() {
         return (
             <Layout>
@@ -48,7 +53,7 @@ class Layouts extends React.Component {
                         </Menu.Item>
                         <Menu.Item key="5">
                             <Icon type="user"/>
-                            <Link style={{display: 'inline-block', textDecoration: 'none'}} to={'/app/customer'}>顾客管理</Link>
+                            <Link style={{display: 'inline-block', textDecoration: 'none'}} to={'/app/customer'}>普通管理员</Link>
                         </Menu.Item>
                     </Menu>
                 </Sider>

@@ -3,21 +3,30 @@ import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import {RouteComponentProps} from 'react-router-dom'
 import { FormComponentProps } from "antd/lib/form/Form";
 import { withRouter } from 'react-router'
+import {observer, inject} from 'mobx-react';
 import './index.scss'
 
 interface LoginPagePros extends RouteComponentProps, FormComponentProps {}
 // @ts-ignore
 @withRouter
+@inject('loginstore')
+@observer
 class Login extends React.Component<LoginPagePros> {
+
  handleSubmit = (e: any) =>{
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
-        if(values.username === '15217710352' && values.password === '123456') 
-        {
-           this.props.history.push('/app/room')
-        }else {
-            message.error('账号或密码错误,请重试');
-        }
+
+      console.log(values);
+      // @ts-ignore
+      const { signIn, issuccess} = this.props.loginstore;
+      signIn(values.phone, values.password);
+      if(issuccess) {
+        this.props.history.push('/app/checkin');
+        message.success('登录成功')
+      }else {
+        message.error('密码错误')
+      }
     })
  }
  render() {
@@ -34,10 +43,10 @@ class Login extends React.Component<LoginPagePros> {
       }}
       >
           <Form.Item>
-              {getFieldDecorator('username', {
+              {getFieldDecorator('phone', {
                   rules: [{
                       required: true,
-                      message: '请输入用户名'
+                      message: '请输入手机号'
                   }]
               })(
                 <Input prefix={<Icon type="user" style={{ fontSize: 15 }} />} style={{width: '300px'}} placeholder="用户名" />

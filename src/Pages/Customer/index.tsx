@@ -7,11 +7,9 @@ import CustomerForm from '../../components/AddCustomer';
 
 interface CustomerPageProps extends RouteComponentProps, FormComponentProps {}
 type CustomerModel = {
-  id: string;
-  name: string;
-  gender?: string;
-  age?: string;
-  idcard?: string;
+  id?:number;
+  phone?: string;
+  password?: string;
 }
 type CustomerPageState ={
   visible: boolean;
@@ -22,24 +20,9 @@ type CustomerPageState ={
 class Customer extends React.Component<CustomerPageProps> {
   columns = [
     {
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '性别',
-      dataIndex: 'gender',
-      key: 'gender',
-    },
-    {
-      title: '年龄',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: '身份证号',
-      key: 'idcard',
-      dataIndex: 'idcard'
+      title: '手机号',
+      dataIndex: 'phone',
+      key: 'phone',
     },
     {
       title: '操作',
@@ -99,7 +82,7 @@ class Customer extends React.Component<CustomerPageProps> {
             return (
               <>
                 <Modal
-                title='顾客信息录入'
+                title='添加普通管理员'
                 okText='保存'
                 cancelText="取消"
                 visible={this.state.visible}
@@ -122,7 +105,7 @@ class Customer extends React.Component<CustomerPageProps> {
                           'Accept': 'application/json,text/plain, */*',
                           'Content-Type': 'application/x-www-form-urlencoded'
                         },
-                        body: `name=${values.name}&gender=${values.gender}&age=${values.age}&idcard=${values.idcard}`
+                        body: `phone=${values.phone}&password=${values.password}`
                       }).then((response) => {
                         message.success('录入顾客信息成功');
                         this.setState({
@@ -143,7 +126,7 @@ class Customer extends React.Component<CustomerPageProps> {
                         console.log(error)
                       })
                     }catch(err) {
-                      message.error('录入顾客信息失败');
+                      message.error('添加普通管理员失败');
                     }
                     }
                   )
@@ -151,7 +134,7 @@ class Customer extends React.Component<CustomerPageProps> {
                 >
                   <CustomerForm wrappedComponentRef={(inst: any) => {this.customerform = inst}}></CustomerForm>
                 </Modal>
-                <Button type='primary' onClick={this.toggleAddCustomerModal.bind(this)}>录入顾客信息</Button>
+                <Button type='primary' onClick={this.toggleAddCustomerModal.bind(this)}>添加普通管理员</Button>
                 <Table scroll={{ y: 490 }} columns={this.columns} dataSource={this.state.list!}/>
               </>
             );
