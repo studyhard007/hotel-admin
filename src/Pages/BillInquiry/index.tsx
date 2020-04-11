@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 class BillInquiry extends React.Component {
   render() {
-    return '这是账单查询页面'
+    return "这是账单查询页面";
   }
 }
 
