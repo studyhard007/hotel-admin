@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Select } from "antd";
+import { Form, Select, Input } from "antd";
 import { FormComponentProps } from "antd/lib/form/Form";
 import "./index.scss";
 const { Option } = Select;
@@ -17,6 +17,14 @@ class CheckInSearchForm extends React.Component<FormComponentProps> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form layout="inline">
+        <Form.Item label="房间编号">
+          {getFieldDecorator(
+            "number",
+            {}
+          )(
+            <Input placeholder="请输入房间编号"></Input>
+          )}
+        </Form.Item>
         <Form.Item label="房间类型">
           {getFieldDecorator(
             "type",

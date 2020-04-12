@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Icon, Input, Button, Checkbox } from "antd";
+import { Form, Icon, Input, Button } from "antd";
 import { RouteComponentProps } from "react-router-dom";
 import { FormComponentProps } from "antd/lib/form/Form";
 import { withRouter } from "react-router";
@@ -59,7 +59,7 @@ class Login extends React.Component<LoginPagePros> {
               <Input
                 prefix={<Icon type="user" style={{ fontSize: 15 }} />}
                 style={{ width: "300px" }}
-                placeholder="用户名"
+                placeholder="请输入用户名"
               />
             )}
           </Form.Item>
@@ -76,20 +76,14 @@ class Login extends React.Component<LoginPagePros> {
                 prefix={<Icon type="lock" style={{ fontSize: 15 }} />}
                 type="password"
                 style={{ width: "300px" }}
-                placeholder="密码"
+                placeholder="请输入密码"
               />
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator("remember", {
-              valuePropName: "checked",
-              initialValue: true,
-            })(<Checkbox>记住我</Checkbox>)}
-            <Button type="primary" htmlType="submit">
-              Log in
+            <Button  style={{width: '200px', marginLeft: '50px'}} type="primary" htmlType="submit">
+              登录
             </Button>
-            <a href="https:www.baidu.com">Forgot password</a>
-            Or <a href="https:www.baidu.com">register now!</a>
           </Form.Item>
         </Form>
       </div>

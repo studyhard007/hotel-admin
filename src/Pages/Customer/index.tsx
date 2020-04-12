@@ -10,6 +10,7 @@ type CustomerModel = {
   id?: number;
   phone?: string;
   password?: string;
+  issuper?: boolean;
 };
 type CustomerPageState = {
   visible: boolean;
@@ -29,6 +30,7 @@ class Customer extends React.Component<CustomerPageProps> {
       key: "action",
       render: (text: any, record: CustomerModel) => (
         <Button
+          disabled={record.issuper ? true : false}
           type="link"
           onClick={async () => {
             fetch("http://localhost:3000/api/v1/deletecustomer", {

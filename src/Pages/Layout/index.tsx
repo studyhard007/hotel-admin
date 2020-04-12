@@ -25,13 +25,11 @@ class Layouts extends React.Component<RouteComponentProps> {
       collapsed: !this.state.collapsed,
     });
   };
-  componentDidMount() {
-    // @ts-ignore
-    console.log(this.props.loginstore.phone);
-  }
+  componentDidMount() {}
   render() {
-    // @ts-ignore
-    const { phone } = this.props.loginstore;
+    const phone = localStorage.getItem("phone");
+    const issuper = localStorage.getItem("issuper");
+
     return (
       <Layout>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
@@ -67,6 +65,15 @@ class Layouts extends React.Component<RouteComponentProps> {
               </Link>
             </Menu.Item>
             <Menu.Item key="4">
+              <Icon type="user-add" />
+              <Link
+                style={{ display: "inline-block", textDecoration: "none" }}
+                to={"/app/billinquiry"}
+              >
+                业绩看板
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="5" disabled={issuper === "true" ? false : true}>
               <Icon type="home" />
               <Link
                 style={{ display: "inline-block", textDecoration: "none" }}
@@ -75,7 +82,7 @@ class Layouts extends React.Component<RouteComponentProps> {
                 客房管理
               </Link>
             </Menu.Item>
-            <Menu.Item key="5">
+            <Menu.Item key="6" disabled={issuper === "true" ? false : true}>
               <Icon type="user" />
               <Link
                 style={{ display: "inline-block", textDecoration: "none" }}
@@ -97,13 +104,12 @@ class Layouts extends React.Component<RouteComponentProps> {
               placement="bottomCenter"
               overlay={
                 <Menu>
-                  <Menu.Item>
-                    <Icon
-                      type="logout"
-                      onClick={() => {
-                        this.props.history.push("/");
-                      }}
-                    />
+                  <Menu.Item
+                    onClick={() => {
+                      this.props.history.push("/");
+                    }}
+                  >
+                    <Icon type="logout" />
                     退出登录
                   </Menu.Item>
                 </Menu>
