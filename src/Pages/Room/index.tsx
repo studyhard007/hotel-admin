@@ -63,7 +63,7 @@ class Room extends React.Component<CustomerPageProps> {
             })
               .then((response) => {
                 message.success("删除成功");
-                fetch("http://localhost:3000/api/v1/getcustomerlist")
+                fetch("http://localhost:3000/api/v1/getroomlist")
                   .then((res) => {
                     return res.json();
                   })
@@ -72,7 +72,6 @@ class Room extends React.Component<CustomerPageProps> {
                       list: data.data,
                     });
                   });
-                return response.json();
               })
               .catch((err) => {
                 console.log(err);
