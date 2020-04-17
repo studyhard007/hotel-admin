@@ -81,7 +81,7 @@ class Login extends React.Component<LoginPagePros> {
             )}
           </Form.Item>
           <Form.Item>
-            <Button  style={{width: '200px', marginLeft: '50px'}} type="primary" htmlType="submit">
+            <Button  style={{width: '300px'}} type="primary" htmlType="submit">
               登录
             </Button>
           </Form.Item>

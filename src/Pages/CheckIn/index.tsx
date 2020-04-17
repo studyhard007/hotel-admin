@@ -205,6 +205,7 @@ class CheckInPage extends React.Component<CheckInPageProps> {
                 if (errors) {
                   return;
                 }
+                console.log(values);
                 try {
                   fetch("http://localhost:3000/api/v1/roomcheckin", {
                     method: "post",
