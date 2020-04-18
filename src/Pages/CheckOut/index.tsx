@@ -164,7 +164,7 @@ class CheckOutPage extends React.Component<RouteComponentProps> {
               return res.json();
             });
             message.success("退房成功");
-            this.props.history.goBack();
+            this.props.history.push('/app/checkinsearch');
             this.toggleModal();
           }}
           onCancel={() => {

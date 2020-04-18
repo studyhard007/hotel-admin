@@ -195,6 +195,7 @@ class CheckInPage extends React.Component<CheckInPageProps> {
           dataSource={this.state.list!}
         />
         <Modal
+          style={{ marginRight: "150px" }}
           title="入住信息登记"
           okText="确定"
           cancelText="取消"

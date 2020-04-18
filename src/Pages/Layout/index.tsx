@@ -9,6 +9,7 @@ import CheckIn from "../CheckIn/index";
 import CheckOut from "../CheckOut/index";
 import CheckInSearch from "../CheckInSearch";
 import BillInquiry from "../BillInquiry";
+import Performance from '../Performance';
 import "./index.scss";
 import { observer, inject } from "mobx-react";
 const { Header, Sider, Content } = Layout;
@@ -56,7 +57,7 @@ class Layouts extends React.Component<RouteComponentProps> {
               </Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Icon type="user-add" />
+              <Icon type="account-book" />
               <Link
                 style={{ display: "inline-block", textDecoration: "none" }}
                 to={"/app/billinquiry"}
@@ -65,10 +66,10 @@ class Layouts extends React.Component<RouteComponentProps> {
               </Link>
             </Menu.Item>
             <Menu.Item key="4">
-              <Icon type="user-add" />
+              <Icon type="bar-chart" />
               <Link
                 style={{ display: "inline-block", textDecoration: "none" }}
-                to={"/app/billinquiry"}
+                to={"/app/performance"}
               >
                 业绩看板
               </Link>
@@ -136,6 +137,7 @@ class Layouts extends React.Component<RouteComponentProps> {
               <Route path="/app/checkout" component={CheckOut} />
               <Route path="/app/checkinsearch" component={CheckInSearch} />
               <Route path="/app/billinquiry" component={BillInquiry} />
+              <Route path="/app/performance" component={Performance} />
             </Switch>
           </Content>
         </Layout>

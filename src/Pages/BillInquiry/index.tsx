@@ -35,7 +35,7 @@ class BillInquiryPage extends React.Component<BillInquiryPageProps> {
       },
     },
     {
-      title: "价格",
+      title: "入账金额",
       dataIndex: "price",
       key: "price",
     },
