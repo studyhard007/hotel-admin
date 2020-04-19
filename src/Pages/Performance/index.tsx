@@ -2,6 +2,10 @@ import React from "react";
 import { Card } from "antd";
 import { Chart, Geom, Axis, Tooltip } from "bizcharts";
 import "./index.scss";
+
+//  type PerformanceState = {
+//    list: 
+//  }
 class Performance extends React.Component {
   titleList = [
     {
@@ -21,6 +25,9 @@ class Performance extends React.Component {
       num: 105550,
     },
   ];
+  componentDidMount() {
+  
+  }
   render() {
     const data = [
       {

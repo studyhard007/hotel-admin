@@ -146,7 +146,7 @@ class CheckOutPage extends React.Component<RouteComponentProps> {
                 this.state.data.price
               }&checkouttime=${moment().unix()}&decoration=${
                 this.state.data.decoration
-              }`,
+              }&billinquiryin=${moment().format('YYYYMMDD')}`,
             }).then((res) => {
               return res.json();
             });
