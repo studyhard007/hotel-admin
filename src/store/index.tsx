@@ -20,6 +20,7 @@ class LoginStore {
             this.phone = phone;
             this.password = password;
             this.issuper = false;
+            localStorage.setItem("phone", phone);
           } else if (data.data.password === password) {
             if (phone === "13000000000") {
               this.issuper = true;
