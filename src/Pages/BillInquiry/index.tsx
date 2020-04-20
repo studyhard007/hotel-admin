@@ -7,7 +7,7 @@ import BillInquirySearch from "../../components/BillInquirySearch";
 interface BillInquiryPageProps
   extends RouteComponentProps,
     FormComponentProps {}
-type BillInquiryModal = {
+export type BillInquiryModal = {
   id?: number;
   type?: string;
   decoration?: string;
