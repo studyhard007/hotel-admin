@@ -199,10 +199,6 @@ lastbillinofmonth = 0;
             <Axis name="billinquiryin" />
             <Axis name="price" />
             <Tooltip
-            // crosshairs用于设置 tooltip 的辅助线或者辅助框
-            // crosshairs={{
-            //  type: "y"
-            // }}
             />
             <Geom type="interval" position="billinquiryin*price" />
           </Chart>
