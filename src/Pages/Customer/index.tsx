@@ -121,7 +121,7 @@ class Customer extends React.Component<CustomerPageProps> {
                     body: `phone=${values.phone}&password=${values.password}`,
                   })
                     .then((response) => {
-                      message.success("录入顾客信息成功");
+                      message.success("录入管理员成功");
                       this.setState({
                         visible: !this.state.visible,
                       });
