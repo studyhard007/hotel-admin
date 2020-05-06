@@ -25,7 +25,7 @@ class CheckInRecordForm extends React.Component<FormComponentProps> {
             {}
           )(
             <Input
-              className="searchstyle"
+              style={{ width: "200px" }}
               placeholder="请输入入住人身份证"
             ></Input>
           )}

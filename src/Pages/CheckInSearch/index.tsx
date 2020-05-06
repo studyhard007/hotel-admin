@@ -50,6 +50,7 @@ class CheckInSearchPage extends React.Component {
     {
       title: "入住人身份证",
       key: "customeridcard",
+      width: '200px',
       dataIndex: "customeridcard",
     },
     {

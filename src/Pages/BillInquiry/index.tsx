@@ -82,7 +82,7 @@ class BillInquiryPage extends React.Component<BillInquiryPageProps> {
               .startOf("day")
               .unix()}&end_at=${moment(values.getBillintime![1])
               .endOf("day")
-              .unix()}`,
+              .unix()}&type=${values.type}&decoration=${values.decoration}`,
           })
             .then((res) => {
               return res.json();
