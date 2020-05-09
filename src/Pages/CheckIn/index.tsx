@@ -150,7 +150,7 @@ class CheckInPage extends React.Component<CheckInPageProps> {
               Accept: "application/json,text/plain, */*",
               "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: `type=${values.type}&decoration=${values.decoration}&isfree=${values.isfree}`,
+            body: `type=${values.type}&decoration=${values.decoration}&isfree=${values.isfree}&number=${values.number}`,
           })
             .then((res) => {
               return res.json();
