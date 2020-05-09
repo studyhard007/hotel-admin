@@ -118,6 +118,18 @@ class CheckInPage extends React.Component<CheckInPageProps> {
         });
       });
   }
+  componentDidUpdate() {
+    fetch("http://localhost:3000/api/v1/getroomlist")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        this.setState({
+          list: data.data,
+        });
+      });
+    console.log("----");
+  }
   // componentDidUpdate() {
   //   fetch('http://localhost:3000/api/v1/getroomlist').then(res => {
   //     return res.json();

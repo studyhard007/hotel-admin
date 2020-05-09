@@ -146,7 +146,7 @@ class CheckOutPage extends React.Component<RouteComponentProps> {
                 this.state.data.price
               }&checkouttime=${moment().unix()}&decoration=${
                 this.state.data.decoration
-              }&billinquiryin=${moment().format('YYYYMMDD')}`,
+              }&billinquiryin=${moment().format("YYYYMMDD")}`,
             }).then((res) => {
               return res.json();
             });
@@ -164,7 +164,7 @@ class CheckOutPage extends React.Component<RouteComponentProps> {
               return res.json();
             });
             message.success("退房成功");
-            this.props.history.push('/app/checkinsearch');
+            this.props.history.goBack();
             this.toggleModal();
           }}
           onCancel={() => {
