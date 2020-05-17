@@ -204,31 +204,41 @@ class CheckInSearchPage extends React.Component {
                     }),
                   {}
                 );
-
-              const _data =
-                this.state &&
-                this.state
-                  .list!.map((item: any, i: any) =>
-                    initColumn.map((key: any, j: any) =>
-                      Object.assign(
-                        {},
-                        {
-                          content: item[key.key],
-                          position: String.fromCharCode(65 + j) + (i + 2),
-                        }
-                      )
+              const data = this.state && this.state.list;
+              data!.forEach((item) => {
+                //@ts-ignore
+                item.checkintime = moment
+                  .unix(item.checkintime!)
+                  .format("YYYY-MM-DD HH:mm:ss");
+                //@ts-ignore
+                item.checkouttime = moment
+                  .unix(item.checkouttime!)
+                  .format("YYYY-MM-DD HH:mm:ss");
+                //@ts-ignore
+                item.ischeckout = item.ischeckout ? "已退房" : "未退房";
+              });
+              const _data = data!
+                .map((item: any, i: any) =>
+                  initColumn.map((key: any, j: any) =>
+                    Object.assign(
+                      {},
+                      {
+                        content: item[key.key],
+                        position: String.fromCharCode(65 + j) + (i + 2),
+                      }
                     )
                   )
-                  // 对刚才的结果进行降维处理（二维数组变成一维数组）
-                  .reduce((prev: any, next: any) => prev.concat(next))
-                  // 转换成 worksheet 需要的结构
-                  .reduce(
-                    (prev: any, next: any) =>
-                      Object.assign({}, prev, {
-                        [next.position]: { v: next.content },
-                      }),
-                    {}
-                  );
+                )
+                // 对刚才的结果进行降维处理（二维数组变成一维数组）
+                .reduce((prev: any, next: any) => prev.concat(next))
+                // 转换成 worksheet 需要的结构
+                .reduce(
+                  (prev: any, next: any) =>
+                    Object.assign({}, prev, {
+                      [next.position]: { v: next.content },
+                    }),
+                  {}
+                );
 
               // 合并 headers 和 data
               const output = Object.assign({}, _headers, _data);

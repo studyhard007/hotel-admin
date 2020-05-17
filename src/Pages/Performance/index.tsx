@@ -99,7 +99,7 @@ lastbillinofmonth = 0;
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: `start_at=${moment()
-          .add(-30, "day")
+          .add(-7, "day")
           .format("YYYYMMDD")}&end_at=${moment()
           .add(-1, "day")
           .format("YYYYMMDD")}`,
